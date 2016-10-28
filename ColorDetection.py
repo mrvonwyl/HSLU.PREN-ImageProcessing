@@ -7,16 +7,18 @@ def maskcolor(image, boundaries):
     upper = np.array(boundaries[0][1], dtype="uint8")
     return cv2.inRange(image, lower, upper)
 
-
 def rotateImage(image, angle):
-    image_center = tuple(np.array(image.shape)/2)
-    rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1)
-    result = cv2.warpAffine(image, rot_mat, image.shape, flags=cv2.INTER_LINEAR)
+    rows, cols, colors = image.shape
+    rotationmatrix = cv2.getRotationMatrix2D((cols/2, rows/2), angle, 1)
+    result = cv2.warpAffine(image, rotationmatrix, (cols, rows))
     return result
 
-img = cv2.imread('images/4wide.jpg')
+img = cv2.imread('images/4wr.jpg')
+orig = img
 
-blackBoundaries = [([0, 0, 0], [20, 20, 20])]
+cv2.imshow('orig', orig)
+
+blackBoundaries = [([0, 0, 0], [50, 50, 50])]
 redBoundaries = [([0, 15, 100], [50, 56, 200])]
 
 black = maskcolor(img, blackBoundaries)
@@ -40,17 +42,11 @@ box = np.int0(box)
 # blue aligned rectangle
 cv2.drawContours(img, [box], 0, (255, 0, 0), 2)
 
-p1 = (box[0][0], box[0][1])
-p2 = (box[1][0], box[1][1])
-p0 = (p2[0], p1[1])
+p1 = box[0]
+p2 = box[1]
 
-cv2.circle(img, p1, 5, (0, 255, 0), 2)
-cv2.circle(img, p2, 5, (0, 255, 0), 2)
-cv2.circle(img, p0, 5, (0, 0, 255), 2)
-
-angle2 = math.atan2(p1[1] - p2[1], p1[0] - p2[0])
-
-# img = rotateImage(img, angle2)
+angle = math.degrees(math.atan2(p1[1] - p2[1], p1[0] - p2[0]))
+img = rotateImage(img, angle)
 
 #################
 
