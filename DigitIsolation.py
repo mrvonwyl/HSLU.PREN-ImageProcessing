@@ -1,8 +1,8 @@
 import numpy as np
-import cv2, math
+import cv2
 
 
-def maskcolor(image, boundaries):
+def mask_color(image, boundaries):
     lower = np.array(boundaries[0][0], dtype="uint8")
     upper = np.array(boundaries[0][1], dtype="uint8")
     return cv2.inRange(image, lower, upper)
@@ -71,48 +71,47 @@ def four_point_transform(image, pts):
     return warped
 
 
-img = cv2.imread('images/5rp.jpg')
+def isolate_roman_digit(img):
+    black_boundaries= [([0, 0, 0], [50, 50, 50])]
+    red_boundaries = [([0, 15, 100], [70, 70, 210])]
 
-cv2.imshow("orig", img)
+    black = mask_color(img, black_boundaries)
+    red = mask_color(img, red_boundaries)
 
-blackBoundaries = [([0, 0, 0], [50, 50, 50])]
-redBoundaries = [([0, 15, 100], [70, 70, 210])]
+    kernel = np.ones((5, 5), np.uint8)
+    red = cv2.morphologyEx(red, cv2.MORPH_CLOSE, kernel)
+    red = cv2.morphologyEx(red, cv2.MORPH_OPEN, kernel)
 
-black = maskcolor(img, blackBoundaries)
-red = maskcolor(img, redBoundaries)
+    cv2.imshow("redMask", red)
 
-kernel = np.ones((5, 5), np.uint8)
-red = cv2.morphologyEx(red, cv2.MORPH_CLOSE, kernel)
-red = cv2.morphologyEx(red, cv2.MORPH_OPEN, kernel)
+    im2, contours, hierarchy = cv2.findContours(red, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
 
-cv2.imshow("redMask", red)
+    i = 0
+    rect = np.zeros((4, 2), dtype = "float32")
 
-im2, contours, hierarchy = cv2.findContours(red, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
+    for cnt in contours:
+        epsilon = 0.01 * cv2.arcLength(cnt, True)
 
-i = 0
-rect = np.zeros((4, 2), dtype = "float32")
+        print(epsilon)
 
-for cnt in contours:
-    epsilon = 0.01 * cv2.arcLength(cnt, True)
-    if epsilon >= 1:
-        approx = cv2.approxPolyDP(cnt, epsilon, True)
-        pts = np.array([tuple(approx[0][0]), tuple(approx[1][0]), tuple(approx[2][0]), tuple(approx[3][0])], dtype = "float32")
-        pts = order_points(pts)
+        if epsilon >= 2:
+            approx = cv2.approxPolyDP(cnt, epsilon, True)
+            pts = np.array([tuple(approx[0][0]), tuple(approx[1][0]), tuple(approx[2][0]), tuple(approx[3][0])], dtype = "float32")
+            pts = order_points(pts)
 
-        if i == 0:
-            rect[0] = pts[1]
-            rect[1] = pts[2]
-        elif i == 1:
-            rect[2] = pts[0]
-            rect[3] = pts[3]
+            if i == 0:
+                rect[0] = pts[1]
+                rect[1] = pts[2]
 
-        print(i)
-        i += 1
+                cv2.rectangle(img, (10, 10), (30, 30), (0, 255, 0), 2)
+            elif i == 1:
+                rect[2] = pts[0]
+                rect[3] = pts[3]
 
-warped = four_point_transform(black, rect)
-resized = cv2.resize(warped, (800, 450), interpolation=cv2.INTER_CUBIC)
+            i += 1
 
-cv2.imshow('resized', resized)
+    #cv2.imshow('')
 
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    warped = four_point_transform(black, rect)
+    resized = cv2.resize(warped, (800, 450), interpolation=cv2.INTER_CUBIC)
+    return resized

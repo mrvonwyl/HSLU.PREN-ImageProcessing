@@ -1,39 +1,23 @@
-import numpy as np
-import cv2,math
+import cv2, time
 
-imgOrig = cv2.imread('E:/2s.jpg')
+from DigitIsolation import isolate_roman_digit
 
+img = cv2.imread('images/c.jpg')
 
-# cv2.inRange(img)
+cap = cv2.VideoCapture(0)
+while(True):
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+    img = frame
+    cv2.imshow("orig", img)
+    resized = isolate_roman_digit(img)
+    cv2.imshow('resized', resized)
 
-img = imgOrig
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
-# define windows name
-winName = "Display window"
-# create new display window
-window = cv2.namedWindow(winName, cv2.WINDOW_NORMAL)
-# resize window to specific size
-cv2.resizeWindow(winName, 800, 450)
-# display image
-cv2.imshow(winName, img)
-
-# cap = cv2.VideoCapture(0)
-# while(True):
-#     # Capture frame-by-frame
-#     ret, frame = cap.read()
-#
-#     # show the images
-#     cv2.imshow("Capture", np.hstack([frame]))
-#     #cv2.waitKey(0);
-#
-#     # Our operations on the frame come here
-#     # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-#
-#     # Display the resulting frame
-#     # cv2.imshow('frame',gray)
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
+    time.sleep(.500)
 
 # When everything done, release the capture
-cv2.waitKey(0)
+cap.release()
 cv2.destroyAllWindows()
