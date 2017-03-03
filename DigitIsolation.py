@@ -110,8 +110,6 @@ def isolate_roman_digit(img):
 
             i += 1
 
-    #cv2.imshow('')
-
     warped = four_point_transform(black, rect)
     resized = cv2.resize(warped, (800, 450), interpolation=cv2.INTER_CUBIC)
     return resized
