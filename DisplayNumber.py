@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+from random import randint
 
 
 class DisplayNumber:
@@ -38,6 +39,8 @@ class DisplayNumber:
             print segment
 
     def displayCount(self, number):
+        #if number>5
+            #number=randint(0,5)
         for number in range(0, 10):
             for loop in range(0, 7):
                 GPIO.output(segments[loop], num[str(number)][loop])
