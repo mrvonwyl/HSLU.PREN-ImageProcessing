@@ -13,3 +13,13 @@ class PinkPanzer:
         # run ziffererkennung -> set recognizedNumber
         # display number
         # send recognized number to FMBD
+
+#Funktioniert für Ziffernanzeige aus anderer Klasse auf Raspberry
+#from DisplayNumber import DisplayNumber
+#import time
+#DisplayNumber = DisplayNumber(1)
+#DisplayNumber.displayCount(2)
+#time.sleep(2)
+#DisplayNumber.displayCount(8)
+#time.sleep(2)
+#DisplayNumber.everythingOff()
