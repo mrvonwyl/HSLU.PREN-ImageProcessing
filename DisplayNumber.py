@@ -4,8 +4,11 @@ from random import randint
 
 
 class DisplayNumber:
+    global empCount
     empCount = 0
+    global segments
     segments = (12, 13, 16, 19, 20, 21, 26)
+    global num
     num = {' ': (1, 1, 1, 1, 1, 1, 1),
            '0': (0, 0, 0, 1, 0, 0, 0),
            '1': (1, 1, 0, 1, 1, 0, 1),
@@ -28,7 +31,7 @@ class DisplayNumber:
         for segment in segments:
             GPIO.setup(segment, GPIO.OUT)
             GPIO.output(segment, 0)
-            print segment
+            #print segment
 
         time.sleep(1)
 
@@ -36,12 +39,20 @@ class DisplayNumber:
         for segment in segments:
             GPIO.setup(segment, GPIO.OUT)
             GPIO.output(segment, 1)
-            print segment
+            #print segment
 
     def displayCount(self, number):
-        #if number>5
-            #number=randint(0,5)
-        for number in range(0, 10):
-            for loop in range(0, 7):
-                GPIO.output(segments[loop], num[str(number)][loop])
-            time.sleep(2)
+        #Sicherheit, falls irgend ein Wert > 5 gemeldet wird.
+        if number>5:
+            number=randint(0,5)
+        #print "Folgende Nummer wird angezeigt" + str(number)
+        for loop in range(0, 7):
+            GPIO.output(segments[loop], num[str(number)][loop])
+            #time.sleep(2)
+
+    def everythingOff(self):
+        # alles ausschalten
+        for segment in segments:
+            GPIO.setup(segment, GPIO.OUT)
+            GPIO.output(segment, 1)
+            #print segment
