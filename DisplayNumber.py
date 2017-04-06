@@ -28,20 +28,11 @@ class DisplayNumber:
         global segments
         global num
         # alles einschalten
-        for segment in segments:
-            GPIO.setup(segment, GPIO.OUT)
-            GPIO.output(segment, 0)
-            #print segment
-
+        self.everythingOn()
         time.sleep(1)
+        self.everythingOff()
 
-        # alles ausschalten
-        for segment in segments:
-            GPIO.setup(segment, GPIO.OUT)
-            GPIO.output(segment, 1)
-            #print segment
-
-    def displayCount(self, number):
+    def displayNumber(self, number):
         #Sicherheit, falls irgend ein Wert > 5 gemeldet wird.
         if number>5:
             number=randint(0,5)
@@ -50,9 +41,28 @@ class DisplayNumber:
             GPIO.output(segments[loop], num[str(number)][loop])
             #time.sleep(2)
 
+    def blink(self,count):
+        for number in range(0,count):
+            self.everythingOff()
+            time.sleep(0.1)
+            self.everythingOn()
+            time.sleep(0.5)
+            self.everythingOff()
+            time.sleep(0.2)
+            self.everytingOn()
+            time.sleep(0.5)
+
+
     def everythingOff(self):
         # alles ausschalten
         for segment in segments:
             GPIO.setup(segment, GPIO.OUT)
             GPIO.output(segment, 1)
+            #print segment
+
+    # alles einschalten
+    def everythingOn(self):
+        for segment in segments:
+            GPIO.setup(segment, GPIO.OUT)
+            GPIO.output(segment, 0)
             #print segment
