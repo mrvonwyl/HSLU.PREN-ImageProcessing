@@ -7,7 +7,7 @@ class DisplayNumber:
     global empCount
     empCount = 0
     global segments
-    segments = (12, 13, 16, 19, 20, 21, 26)
+    segments = (17, 27, 22, 10, 24, 23, 18)
     global num
     num = {' ':(1,1,1,1,1,1,1),
            '0':(0,1,0,0,0,0,0),
@@ -32,7 +32,7 @@ class DisplayNumber:
         time.sleep(1)
         self.everythingOff()
 
-    def displayNumber(self, number):
+    def displayDigit(self, number):
         #Sicherheit, falls irgend ein Wert > 5 gemeldet wird.
         if number>5:
             number=randint(0,5)
@@ -44,13 +44,13 @@ class DisplayNumber:
     def blink(self,count):
         for number in range(0,count):
             self.everythingOff()
+            time.sleep(0.5)
+            self.everythingOn()
+            time.sleep(0.2)
+            self.everythingOff()
             time.sleep(0.1)
             self.everythingOn()
-            time.sleep(0.5)
-            self.everythingOff()
             time.sleep(0.2)
-            self.everytingOn()
-            time.sleep(0.5)
 
 
     def everythingOff(self):
