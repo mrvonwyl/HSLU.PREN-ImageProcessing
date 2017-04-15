@@ -1,6 +1,6 @@
 import time
 
-import cv2
+import cv2, math
 import numpy as np
 
 from DigitIsolation import DigitIsolation
@@ -18,12 +18,21 @@ while(True):
     edges = cv2.Canny(resized,50,150,apertureSize = 3)
     #lines = cv2.HoughLinesP(edges,1,np.pi/180,100,minLineLength=100,maxLineGap=10)
     #lines = cv2.HoughLinesP(image=edges,rho=0.1,theta=np.pi/500, threshold=19,lines=np.array([]), minLineLength=100,maxLineGap=100)
-    lines = cv2.HoughLinesP(image=edges,rho=2,theta=np.pi/180, threshold=130,lines=np.array([]), minLineLength=120,maxLineGap=100)
+    height, width = edges.shape[:2]
+    print(height)
+    lines = cv2.HoughLinesP(image=edges,rho=2,theta=np.pi/180, threshold=130,lines=np.array([]), minLineLength=231,maxLineGap=30)
     print("Anzahl Linien:")
     print(len(lines))
     draw_im = cv2.cvtColor(resized, cv2.COLOR_GRAY2BGR)
     for line in lines:
         x1,y1,x2,y2 = line[0]
+
+        deltaX=x2-x1
+        deltaY=y2-y1
+        temp=(deltaX*deltaX)+(deltaY*deltaY)
+        length=math.sqrt(temp)
+        print(length)
+
         #print("x1: "+str(x1)+" x2: "+str(x2))
         # print("y1: "+str(y1)+" y2: "+str(y2))
         #if((x2)<(x1-(x1*0.2))) or ((x2)<(x1+(x1*0.2))):
