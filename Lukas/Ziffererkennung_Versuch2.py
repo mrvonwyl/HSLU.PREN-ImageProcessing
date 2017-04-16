@@ -6,7 +6,7 @@ import numpy as np
 
 from DigitIsolation import DigitIsolation
 
-img = cv2.imread('../images/4.png')
+img = cv2.imread('../images/Nr4.png')
 
 cap = cv2.VideoCapture('../images/v2.webm')
 
@@ -34,12 +34,14 @@ while(numbFound==False):
     for i in corners: #draws on corners
         x,y = i.ravel()
 
-        # Nur Bilder am oberen oder unteren Rand auswählen
-        if(y<10):
+        # Nur Corners am oberen oder unteren Rand auswählen
+        #5% ausrechnen
+        top10proz=height*0.05
+        if(y<top10proz):
             arrOben.append([x,y])
             arrAll.append([x,y])
             cv2.circle(draw_im,(x,y), 10, (0,0,255), 2)
-        if(y>(height-10)):
+        if(y>(height-top10proz)):
             arrUnten.append([x,y])
             arrAll.append([x,y])
             cv2.circle(draw_im,(x,y), 10, (0,0,255), 2)
@@ -47,12 +49,15 @@ while(numbFound==False):
     arrUnten=sorted(arrUnten, key=itemgetter(0))
     arrOben=sorted(arrOben, key=itemgetter(0))
 
-
-
     if(len(arrAll)==12):
         distX5X4Oben=arrOben[4][0]-arrOben[3][0]
         distX5X4Unten=arrUnten[4][0]-arrUnten[3][0]
         verhaeltnissX4=distX5X4Oben-distX5X4Unten
+        ################################################################################
+        # Hier aufpassen
+        # Diese Rechnung ist noch nicht verlässlich
+        # müssten hier noch eine Logik finden wie man das verhältniss einstuffen soll
+        ################################################################################
         if(verhaeltnissX4)<100 and verhaeltnissX4 > -100:
             print ("3 gefunden")
             numbFound=True

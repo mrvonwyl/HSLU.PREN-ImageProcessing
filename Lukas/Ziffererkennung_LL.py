@@ -41,12 +41,38 @@ while(True):
     cv2.imshow('red', red)
 
     # Neu mit den nur Roten Linien weiterarbeiten. So habe ich schöne Geraden und könnte diese weiterverwenden
-    kernel = np.ones((5,5), np.uint8)
+    kernel = np.ones((4,4), np.uint8)
     kernel_5x5 = np.ones((5,5), np.float32) / 5.0
     output = cv2.filter2D(red, -1, kernel_5x5)
     cv2.imshow('output', output)
     img_erosion = cv2.erode(output, kernel, iterations=1)
     cv2.imshow('img_erosion', img_erosion)
+
+    height, width = img_erosion.shape[:2]
+    print(height)
+    lines = cv2.HoughLinesP(image=img_erosion,rho=2,theta=np.pi/180, threshold=200,lines=np.array([]), minLineLength=200,maxLineGap=30)
+    print("Anzahl Linien:")
+    print(len(lines))
+    draw_im = cv2.cvtColor(resized, cv2.COLOR_GRAY2BGR)
+    for line in lines:
+        x1,y1,x2,y2 = line[0]
+
+        deltaX=x2-x1
+        deltaY=y2-y1
+        temp=(deltaX*deltaX)+(deltaY*deltaY)
+        length=math.sqrt(temp)
+        print(length)
+
+        #print("x1: "+str(x1)+" x2: "+str(x2))
+        # print("y1: "+str(y1)+" y2: "+str(y2))
+        #if((x2)<(x1-(x1*0.2))) or ((x2)<(x1+(x1*0.2))):
+        #print("nicht")
+        #else:
+        #print("gerade")
+        cv2.line(draw_im,(x1,y1),(x2,y2),(0,0,255),2)
+    print ("---")
+    cv2.imshow('draw_im', draw_im)
+
 
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
