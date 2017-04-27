@@ -2,9 +2,10 @@ import time
 
 import cv2
 
-from DigitIsolation import DigitIsolation
+from DigitIsolation import DigitIsolation as di
+from DigitRecognition import DigitRecognition as dr
 
-img = cv2.imread('images/4.png')
+img = cv2.imread('images/Nr4.png')
 
 cap = cv2.VideoCapture('images/v2.webm')
 while(True):
@@ -12,7 +13,12 @@ while(True):
     ret, frame = cap.read()
     # img = frame
     cv2.imshow("orig", img)
-    resized = DigitIsolation.isolate_roman_digit(img)
+    resized = di.isolate_roman_digit(img)
+
+    number = dr.recognize_digit(resized)
+
+    print(number);
+
     cv2.imshow('resized', resized)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
