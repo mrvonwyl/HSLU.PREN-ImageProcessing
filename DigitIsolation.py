@@ -142,6 +142,11 @@ class DigitIsolation:
         offsetY = 0
         height = 0
 
+        y = 0
+        x = 0
+        w = 0
+        h = 0
+
         for contour in contours:
             [x, y, w, h] = cv2.boundingRect(contour)
             if w * h > width * height and w > 10 and h > 10:
