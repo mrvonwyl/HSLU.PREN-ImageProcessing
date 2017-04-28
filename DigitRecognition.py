@@ -17,8 +17,10 @@ class DigitRecognition:
             # Höhe von Bild auslesen
             height, width = img.shape[:2]
 
+            print(width)
+
             # Alle Corners in Bild finden.
-            corners = cv2.goodFeaturesToTrack(img, 10000, 0.0001, 10)
+            corners = cv2.goodFeaturesToTrack(img, 10000, 0.0001, 10) # faktor ist 10 / 570
             draw_im = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
             arr_oben = []
             arr_unten = []
@@ -50,13 +52,13 @@ class DigitRecognition:
             if len(arr_all) == 12:
                 distX5X4Oben = arr_oben[4][0] - arr_oben[3][0]
                 distX5X4Unten = arr_unten[4][0] - arr_unten[3][0]
-                verhaeltnissX4 = distX5X4Oben - distX5X4Unten
+                verhaeltnisX4 = distX5X4Oben - distX5X4Unten
                 ################################################################################
                 # Hier aufpassen
                 # Diese Rechnung ist noch nicht verlässlich
                 # müssten hier noch eine Logik finden wie man das verhältniss einstuffen soll
                 ################################################################################
-                if verhaeltnissX4 < 100 and verhaeltnissX4 > -100:
+                if verhaeltnisX4 < (width * 0.2) and verhaeltnisX4 > (width * -0.2):
                     number = 3
                     number_found = True
                 else:
@@ -80,4 +82,4 @@ class DigitRecognition:
 
             cv2.imshow('resized2', draw_im)
 
-            return number
+        return number
