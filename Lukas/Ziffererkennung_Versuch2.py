@@ -6,12 +6,12 @@ import numpy as np
 
 from DigitIsolation import DigitIsolation
 
-img = cv2.imread('../images/Nr4.png')
+img = cv2.imread('../images/Nr2.png')
 
 cap = cv2.VideoCapture('../images/v2.webm')
 
 numbFound=False
-while(numbFound==False):
+while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
     # img = frame

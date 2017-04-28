@@ -1,3 +1,6 @@
+import threading
+from DisplayNumber import DisplayNumber as dn
+
 class PinkPanzer:
     readyToStart = 0
     recognizedNumber = 0
@@ -8,6 +11,8 @@ class PinkPanzer:
         # init ampelerkennung
         # init kamera Z
         # init ziffererkennung
+        t_blink = threading.Thread(target=dn.blink())
+        t_blink.start()
         # run ampelerkennung -> set readyToStart
         # send info to FMBD
         # run ziffererkennung -> set recognizedNumber

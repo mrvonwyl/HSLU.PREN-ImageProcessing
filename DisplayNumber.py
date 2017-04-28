@@ -41,8 +41,8 @@ class DisplayNumber:
             GPIO.output(segments[loop], num[str(number)][loop])
             #time.sleep(2)
 
-    def blink(self,count):
-        for number in range(0,count):
+    def blink(self):
+        while(True):
             self.everythingOff()
             time.sleep(0.5)
             self.everythingOn()
