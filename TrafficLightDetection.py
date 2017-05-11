@@ -6,18 +6,19 @@ import cv2
 # returns a resized, blurred and HSV color space converted frame
 def frame_prep(frame):
         frame = imutils.resize(frame, width = 600)
+        frame = frame[200:500, 50:200]
         frame = cv2.GaussianBlur(frame, (11, 11), 0)
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         return frame
 
 # detects the given color and creates a bit mask for said color
 def color_detection(frame, color):
 
         if (color == 'red'):
-                top_min = np.array([170, 100, 100])
-                top_max = np.array([170, 100, 100])
-                bottom_min = np.array([170, 100, 100])
-                bottom_max = np.array([170, 100, 100])
+                top_min = np.array([170, 50, 50])
+                top_max = np.array([180, 255, 255])
+                bottom_min = np.array([  0, 50, 50])
+                bottom_max = np.array([ 10, 255, 255])
 
         elif (color == 'green'):
                 top = np.array([170, 100, 100])
@@ -63,8 +64,8 @@ def go_time(contour):
 
                 # only proceed if the radius meets a minimum and maximum size
                 if (radius > 10 and radius < 15):
-                        return True
+                        return 'pg'
                 else:
-                        return False
+                        return 'ps'
         else:
-                return False
+                return 'ps'
