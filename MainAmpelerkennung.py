@@ -1,9 +1,12 @@
 import cv2
 import time
 from TrafficLightDetection import *
+from Serial import Serial
 
-#def start_traffic_light_detection():
 print('Start Capture')
+
+# initialize serial connection
+ser = Serial()
 
 # start the video capture
 camera = cv2.VideoCapture(0)
@@ -78,5 +81,5 @@ else:
 print ('Go Time')
 camera.release()
 cv2.destroyAllWindows()
-#return traffic_light
+ser.sendText(_, traffic_light)
 
