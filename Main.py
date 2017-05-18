@@ -11,8 +11,13 @@ class PinkPanzer:
         # init ampelerkennung
         # init kamera Z
         # init ziffererkennung
+
+        # Thread starten, welcher die Ziefferanzeige blinken lässt
         t_blink = threading.Thread(target=dn.blink())
         t_blink.start()
+        #mit t_blink.join() kann thread beendet werden
+
+        dn.displayDigit(4)
         # run ampelerkennung -> set readyToStart
         # send info to FMBD
         # run ziffererkennung -> set recognizedNumber
