@@ -1,5 +1,6 @@
 import threading
-from DisplayNumber import DisplayNumber as dn
+from DisplayNumber import DisplayNumber
+from AmpelMain import MainAmpelerkennung
 
 class PinkPanzer:
     readyToStart = 0
@@ -13,8 +14,7 @@ class PinkPanzer:
         # init ziffererkennung
 
         # Thread starten, welcher die Ziefferanzeige blinken lässt
-        t_blink = threading.Thread(target=dn.blink())
-        t_blink.start()
+
         #mit t_blink.join() kann thread beendet werden
 
         dn.displayDigit(4)
@@ -24,6 +24,16 @@ class PinkPanzer:
         # display number
         # send recognized number to FMBD
 
+    def main():
+        #dn = DisplayNumber()
+        #t_blink = threading.Thread(target=dn.blink())
+        #t_blink.start()
+        ampel = MainAmpelerkennung()
+        t_ampel = threading.Thread(target=ampel.ampelerkennung())
+        t_ampel.start()
+
+    if __name__ == '__main__':
+        main()
 #Funktioniert für Ziffernanzeige aus anderer Klasse auf Raspberry
 #from DisplayNumber import DisplayNumber
 #import time
