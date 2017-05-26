@@ -6,8 +6,8 @@ import cv2
 # returns a resized, blurred and HSV color space converted frame
 def frame_prep(frame):
         frame = imutils.resize(frame, width = 600)
-        frame = frame[200:500, 50:200]
-        frame = cv2.GaussianBlur(frame, (11, 11), 0)
+        frame = frame[175:365, 475:515]
+        #frame = cv2.GaussianBlur(frame, (11, 11), 0)
         #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         return frame
 

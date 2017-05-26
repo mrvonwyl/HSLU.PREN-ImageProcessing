@@ -11,6 +11,9 @@ ser = Serial()
 # start the video capture
 camera = cv2.VideoCapture(0)
 
+# Load an image
+#frame = cv2.imread('images/PositionAmpel.png')
+
 # initialize variables for traffic light detection
 # loop: initial state TRUE to run the loop and FALSE to stop the loop
 # traffic_light: initial state red = FALSE and green = TRUE
