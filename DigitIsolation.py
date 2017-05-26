@@ -17,7 +17,7 @@ class DigitIsolation:
         # such that the first entry in the list is the top-left,
         # the second entry is the top-right, the third is the
         # bottom-right, and the fourth is the bottom-left
-        rect = np.zeros((4, 2), dtype = "float32")
+        rect = np.zeros((4, 2), dtype="float32")
 
         # the top-left point will have the smallest sum, whereas
         # the bottom-right point will have the largest sum
@@ -32,8 +32,8 @@ class DigitIsolation:
         rect[1] = pts[np.argmin(diff)]
         rect[3] = pts[np.argmax(diff)]
 
-        # return the ordered coordinates
-        return rect
+        # return the ordered coordinates as tl, tr, br, bl
+        return rect[0], rect[1], rect[2], rect[3]
 
     @staticmethod
     def four_point_transform(image, pts):
@@ -76,57 +76,107 @@ class DigitIsolation:
 
     @staticmethod
     def isolate_roman_digit(img):
-        black_boundaries = [([0, 0, 0], [50, 50, 50])]
-        red_boundaries = [([0, 15, 100], [70, 70, 210])]
+        black_min = np.array([0, 0, 0], np.uint8)
+        black_max = np.array([180, 255, 5], np.uint8)
 
-        black = DigitIsolation.mask_color(img, black_boundaries)
-        red = DigitIsolation.mask_color(img, red_boundaries)
+        red1_min = np.array([0, 70, 50], np.uint8)
+        red1_max = np.array([10, 255, 255], np.uint8)
+        red2_min = np.array([170, 70, 50], np.uint8)
+        red2_max = np.array([180, 255, 255], np.uint8)
 
-        cv2.imshow('b', black)
+        bgrimg = img
+        hsvimg = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+        redmask1 = cv2.inRange(hsvimg, red1_min, red1_max)
+        redmask2 = cv2.inRange(hsvimg, red2_min, red2_max)
+        redmask = redmask1 | redmask2
+
+        blackmask = cv2.inRange(hsvimg, black_min, black_max)
+
+        # cv2.imshow('blackMask', blackmask)
 
         kernel = np.ones((5, 5), np.uint8)
-        red = cv2.morphologyEx(red, cv2.MORPH_CLOSE, kernel)
-        red = cv2.morphologyEx(red, cv2.MORPH_OPEN, kernel)
+        redmask = cv2.morphologyEx(redmask, cv2.MORPH_CLOSE, kernel)
+        redmask = cv2.morphologyEx(redmask, cv2.MORPH_OPEN, kernel)
 
-        cv2.imshow("redMask", red)
-        im2, contours, hierarchy = cv2.findContours(red, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
+        imgred = cv2.bitwise_and(bgrimg, bgrimg, mask=redmask)
+
+        cv2.imshow('imgred', imgred)
+
+        # Create a blank 300x300 black image
+        height, width = img.shape[:2]
+        black = np.zeros((height, width, 3), np.uint8)
+        # Fill image with red color(set each pixel to red)
+        black[:] = (0, 0, 0)
+
+        #return imgred
+
+        #####################################3
+
+        im2, contours, hierarchy = cv2.findContours(redmask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
 
         i = 0
         rect = np.zeros((4, 2), dtype="float32")
 
+        largeste = 0
+        secondlargeste = 0
+        largestc = 0
+        secondlargestc = 0
+
         for cnt in contours:
             epsilon = 0.01 * cv2.arcLength(cnt, True)
 
-            # print(epsilon)
-
+            # eventuell cv2.contourArea(cnt) < 100 verwenden
             if epsilon >= 2:
-                approx = cv2.approxPolyDP(cnt, epsilon, True)
-                pts = np.array([tuple(approx[0][0]), tuple(approx[1][0]), tuple(approx[2][0]), tuple(approx[3][0])], dtype="float32")
-                pts = DigitIsolation.order_points(pts)
+                if epsilon > largeste:
+                    secondlargeste = largeste
+                    secondlargestc = largestc
+                    largeste = epsilon
+                    largestc = cnt
 
-                if i == 0:
-                    rect[0] = pts[1]
-                    rect[1] = pts[2]
+                elif epsilon > secondlargeste:
+                    secondlargeste = epsilon
+                    secondlargestc = cnt
 
-                    # cv2.rectangle(img, (10, 10), (30, 30), (0, 255, 0), 2)
-                elif i == 1:
-                    rect[2] = pts[0]
-                    rect[3] = pts[3]
+        if largeste > 0 and secondlargeste > 0:
+            rect1 = cv2.minAreaRect(largestc)
+            box1 = cv2.boxPoints(rect1)
+            box1 = np.int0(box1)
 
-                i += 1
+            rect2 = cv2.minAreaRect(secondlargestc)
+            box2 = cv2.boxPoints(rect2)
+            box2 = np.int0(box2)
 
-        warped = DigitIsolation.four_point_transform(black, rect)
-        resized = cv2.resize(warped, (800, 450), interpolation=cv2.INTER_CUBIC)
+            _, tl, bl, _ = DigitIsolation.order_points(box1);
+            tr, _, _, br = DigitIsolation.order_points(box2);
 
-        resized = DigitIsolation.digit_bounding_box(resized)
+            roi = np.zeros((4, 2), dtype="float32")
+            roi[0] = tl
+            roi[1] = tr
+            roi[2] = br
+            roi[3] = bl
 
-        return resized
+            roi = DigitIsolation.order_points(roi)
+
+            print(roi)
+
+            cv2.circle(black, (tl[0], tl[1]), 3, (0, 255, 0), 3)
+            cv2.circle(black, (tr[0], tr[1]), 3, (120, 255, 0), 3)
+            cv2.circle(black, (br[0], br[1]), 3, (0, 255, 120), 3)
+            cv2.circle(black, (bl[0], bl[1]), 3, (230, 100, 10), 3)
+
+            #cv2.drawContours(black, [roi], 0, (255, 0, 0), 2)
+            cv2.drawContours(black, [box1], 0, (0, 255, 0), 2)
+            cv2.drawContours(black, [box2], 0, (0, 255, 0), 2)
+
+        cv2.imshow('roi', black)
+
+
+        return bgrimg
+
 
     @staticmethod
     def digit_bounding_box(img):
-
-        cv2.imshow('asd', img)
-
         margin = 0.2
 
         black = copy.copy(img)
