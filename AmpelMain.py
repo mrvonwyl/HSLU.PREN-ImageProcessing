@@ -64,7 +64,7 @@ if (camera.isOpened()):
             # increase the emergency counter
             emergency_counter += 1
 
-            #cv2.imshow('frame', frame)
+            cv2.imshow('frame', frame)
             cv2.imshow('prepped_frame', prepped_frame)
             cv2.imshow('mask', mask)
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -89,5 +89,5 @@ else:
 print ('Go Time')
 camera.release()
 cv2.destroyAllWindows()
-ser.sendText(_, traffic_light)
+ser.sendText(traffic_light)
 

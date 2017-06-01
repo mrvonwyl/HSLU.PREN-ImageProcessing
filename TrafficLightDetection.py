@@ -24,8 +24,8 @@ def color_detection(frame, color):
                 # then perform a series of dilations and erosions to
                 # remove any small blobs left in the mask
                 mask_top = cv2.inRange(frame, top_min, top_max)
-                mask_top = cv2.erode(mask_top, None, iterations = 5)
-                mask_top = cv2.dilate(mask_top, None, iterations = 5)
+                mask_top = cv2.erode(mask_top, None, iterations = 2)
+                mask_top = cv2.dilate(mask_top, None, iterations = 2)
 
                 # construct a mask for the bottom bound of the color "red",
                 # then perform a series of dilations and erosions to
@@ -69,8 +69,7 @@ def go_time(contour):
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
                 # only proceed if the radius meets a minimum and maximum size
-                #if (radius > 10):
-                if (radius > 10):
+                if (radius > 5):
                         return 'g'
                 else:
                         return 's'
