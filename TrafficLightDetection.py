@@ -45,8 +45,8 @@ def color_detection(frame, color):
                 # then perform a series of dilations and erosions to
                 # remove any small blobs left in the mask
                 mask = cv2.inRange(frame, bottom, top)
-                mask = cv2.erode(mask, None, iterations = 10)
-                mask = cv2.dilate(mask, None, iterations = 10)
+                mask = cv2.erode(mask, None, iterations = 2)
+                mask = cv2.dilate(mask, None, iterations = 2)
                 
         return mask
 
