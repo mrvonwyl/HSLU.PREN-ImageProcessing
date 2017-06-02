@@ -1,4 +1,7 @@
 import threading
+
+import multiprocessing
+
 from DisplayNumber import DisplayNumber
 from AmpelMain import MainAmpelerkennung
 
@@ -17,7 +20,6 @@ class PinkPanzer:
 
         #mit t_blink.join() kann thread beendet werden
 
-        dn.displayDigit(4)
         # run ampelerkennung -> set readyToStart
         # send info to FMBD
         # run ziffererkennung -> set recognizedNumber
@@ -25,12 +27,18 @@ class PinkPanzer:
         # send recognized number to FMBD
 
     def main():
-        #dn = DisplayNumber()
+        dn = DisplayNumber()
+        ampel = MainAmpelerkennung()
+        process = multiprocessing.Process(target=dn.blink)
+        process2 = multiprocessing.Process(target=ampel.detect_light)
+        process.start()
+        process2.start()
+
         #t_blink = threading.Thread(target=dn.blink())
         #t_blink.start()
-        ampel = MainAmpelerkennung()
-        t_ampel = threading.Thread(target=ampel.detect_light())
-        t_ampel.start()
+        #ampel = MainAmpelerkennung()
+        #t_ampel = threading.Thread(target=ampel.detect_light())
+        #t_ampel.start()
 
     if __name__ == '__main__':
         main()
