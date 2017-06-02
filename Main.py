@@ -29,7 +29,7 @@ class PinkPanzer:
         #t_blink = threading.Thread(target=dn.blink())
         #t_blink.start()
         ampel = MainAmpelerkennung()
-        t_ampel = threading.Thread(target=ampel.ampelerkennung())
+        t_ampel = threading.Thread(target=ampel.detect_light())
         t_ampel.start()
 
     if __name__ == '__main__':
