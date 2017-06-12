@@ -25,7 +25,7 @@ cap.set(16, -10)
 number = 0
 
 while number == 0:
-    img = cv2.imread('images/Nr4s.png')
+    img = cv2.imread('images/NR44.png')
 
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -41,7 +41,7 @@ while number == 0:
         print(height)
         print(width)
 
-       # number = dr.recognize_digit(resized)
+        number = dr.recognize_digit(resized)
     except (KeyboardInterrupt, SystemExit):
         raise
     #except:
@@ -53,6 +53,7 @@ while number == 0:
         break
 
     time.sleep(.500)
+    number = 0
 
 # When everything done, release the capture
 print("final number");

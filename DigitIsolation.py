@@ -11,6 +11,11 @@ class DigitIsolation:
         upper = np.array(boundaries[0][1], dtype="uint8")
         return cv2.inRange(image, lower, upper)
 
+    #@staticmethod
+    #def order_points_roi(pts):
+
+
+
     @staticmethod
     def order_points(pts):
         # initialzie a list of coordinates that will be ordered
@@ -81,7 +86,7 @@ class DigitIsolation:
     @staticmethod
     def isolate_roman_digit(img):
         black_min = np.array([0, 0, 0], np.uint8)
-        black_max = np.array([50, 50, 50], np.uint8)
+        black_max = np.array([30, 30, 30], np.uint8)
 
         # blackBoundaries = [([0, 0, 0], [50, 50, 50])]
 
@@ -155,16 +160,16 @@ class DigitIsolation:
             roi[2] = br
             roi[3] = bl
 
-            tr, tl, bl, br = DigitIsolation.order_points(roi)
+            tl, tr, br, bl = DigitIsolation.order_points(roi)
             roi[0] = tl
             roi[1] = tr
             roi[2] = br
             roi[3] = bl
 
-            cv2.circle(black, (tl[0], tl[1]), 3, (0, 0, 255), 10)
-            cv2.circle(black, (tr[0], tr[1]), 3, (255, 0, 0), 10)
-            cv2.circle(black, (br[0], br[1]), 3, (255, 0, 0), 10)
-            cv2.circle(black, (bl[0], bl[1]), 3, (0, 0, 255), 10)
+            cv2.circle(black, (tl[0], tl[1]), 3, (0, 255, 255), 10) # yellow
+            cv2.circle(black, (tr[0], tr[1]), 3, (255, 0, 0), 10) # blue
+            cv2.circle(black, (br[0], br[1]), 3, (255, 0, 255), 10) # magenta
+            cv2.circle(black, (bl[0], bl[1]), 3, (255, 255, 0), 10) # cyan
 
             cv2.drawContours(black, [box1], 0, (0, 255, 0), 2)
             cv2.drawContours(black, [box2], 0, (0, 255, 0), 2)
