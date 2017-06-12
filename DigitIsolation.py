@@ -39,8 +39,12 @@ class DigitIsolation:
     def four_point_transform(image, pts):
         # obtain a consistent order of the points and unpack them
         # individually
-        rect = DigitIsolation.order_points(pts)
-        (tl, tr, br, bl) = rect
+        tr, tl, bl, br = DigitIsolation.order_points(pts)
+        rect = np.zeros((4, 2), dtype="float32")
+        rect[0] = tl
+        rect[1] = tr
+        rect[2] = br
+        rect[3] = bl
 
         # compute the width of the new image, which will be the
         # maximum distance between bottom-right and bottom-left
@@ -77,7 +81,9 @@ class DigitIsolation:
     @staticmethod
     def isolate_roman_digit(img):
         black_min = np.array([0, 0, 0], np.uint8)
-        black_max = np.array([180, 255, 5], np.uint8)
+        black_max = np.array([50, 50, 50], np.uint8)
+
+        # blackBoundaries = [([0, 0, 0], [50, 50, 50])]
 
         red1_min = np.array([0, 70, 50], np.uint8)
         red1_max = np.array([10, 255, 255], np.uint8)
@@ -90,10 +96,6 @@ class DigitIsolation:
         redmask1 = cv2.inRange(hsvimg, red1_min, red1_max)
         redmask2 = cv2.inRange(hsvimg, red2_min, red2_max)
         redmask = redmask1 | redmask2
-
-        blackmask = cv2.inRange(hsvimg, black_min, black_max)
-
-        # cv2.imshow('blackMask', blackmask)
 
         kernel = np.ones((5, 5), np.uint8)
         redmask = cv2.morphologyEx(redmask, cv2.MORPH_CLOSE, kernel)
@@ -114,9 +116,6 @@ class DigitIsolation:
         #####################################3
 
         im2, contours, hierarchy = cv2.findContours(redmask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
-
-        i = 0
-        rect = np.zeros((4, 2), dtype="float32")
 
         largeste = 0
         secondlargeste = 0
@@ -147,8 +146,8 @@ class DigitIsolation:
             box2 = cv2.boxPoints(rect2)
             box2 = np.int0(box2)
 
-            _, tl, bl, _ = DigitIsolation.order_points(box1);
-            tr, _, _, br = DigitIsolation.order_points(box2);
+            _, tl, bl, _ = DigitIsolation.order_points(box1)
+            tr, _, _, br = DigitIsolation.order_points(box2)
 
             roi = np.zeros((4, 2), dtype="float32")
             roi[0] = tl
@@ -156,27 +155,36 @@ class DigitIsolation:
             roi[2] = br
             roi[3] = bl
 
-            roi = DigitIsolation.order_points(roi)
+            tr, tl, bl, br = DigitIsolation.order_points(roi)
+            roi[0] = tl
+            roi[1] = tr
+            roi[2] = br
+            roi[3] = bl
 
-            print(roi)
+            cv2.circle(black, (tl[0], tl[1]), 3, (0, 0, 255), 10)
+            cv2.circle(black, (tr[0], tr[1]), 3, (255, 0, 0), 10)
+            cv2.circle(black, (br[0], br[1]), 3, (255, 0, 0), 10)
+            cv2.circle(black, (bl[0], bl[1]), 3, (0, 0, 255), 10)
 
-            cv2.circle(black, (tl[0], tl[1]), 3, (0, 255, 0), 3)
-            cv2.circle(black, (tr[0], tr[1]), 3, (120, 255, 0), 3)
-            cv2.circle(black, (br[0], br[1]), 3, (0, 255, 120), 3)
-            cv2.circle(black, (bl[0], bl[1]), 3, (230, 100, 10), 3)
-
-            #cv2.drawContours(black, [roi], 0, (255, 0, 0), 2)
             cv2.drawContours(black, [box1], 0, (0, 255, 0), 2)
             cv2.drawContours(black, [box2], 0, (0, 255, 0), 2)
 
         cv2.imshow('roi', black)
 
+        warped = DigitIsolation.four_point_transform(bgrimg, roi)
+        blackmask = cv2.inRange(warped, black_min, black_max)
+        resized = cv2.resize(blackmask, (800, 450), interpolation=cv2.INTER_CUBIC)
 
-        return bgrimg
+        resized = DigitIsolation.digit_bounding_box(resized)
+
+        return resized
 
 
     @staticmethod
     def digit_bounding_box(img):
+
+        cv2.imshow('asd', img)
+
         margin = 0.2
 
         black = copy.copy(img)
