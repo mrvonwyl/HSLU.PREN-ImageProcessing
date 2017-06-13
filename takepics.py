@@ -5,7 +5,7 @@ import cv2
 from DigitIsolation import DigitIsolation as di
 from DigitRecognition import DigitRecognition as dr
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 # cap.set(3, 1280)
 # cap.set(4, 720)
@@ -20,39 +20,26 @@ cap = cv2.VideoCapture(1)
 # FPS
 # cap.set(6, 0.1)
 
-number = 0
+number = 1
 
-while number == 0:
+while number > 0:
     img = cv2.imread('images/3.jpg')
 
     # Capture frame-by-frame
     ret, frame = cap.read()
+    img = frame
 
-    try:
-        # img = frame
-        cv2.imshow("orig", img)
+    cv2.imshow('asd', img)
+    fn = 'imgs/' + repr(number) + '.jpg'
+    print(fn)
+    cv2.imwrite('imgs/' + repr(number) + '.jpg', img)
 
-        resized = di.isolate_roman_digit(img)
-        cv2.imshow('resized', resized)
-        height, width = resized.shape[:2]
-
-        number = dr.recognize_digit(resized)
-    except (KeyboardInterrupt, SystemExit):
-        raise
-    except:
-        print("Error");
-
-    print(number);
+    number += 1
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
     time.sleep(.500)
-    number = 0
-
-# When everything done, release the capture
-print("final number");
-print(number);
 
 cap.release()
 cv2.destroyAllWindows()
