@@ -12,7 +12,7 @@ cap = cv2.VideoCapture(0)
 # brightness
 # cap.set(11, 2000)
 # exposure
-cap.set(16, -10)
+# cap.set(16, -10)
 # contrast
 # cap.set(12, 10)
 # gain
