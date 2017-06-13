@@ -42,8 +42,8 @@ while number == 0:
         number = dr.recognize_digit(resized)
     except (KeyboardInterrupt, SystemExit):
         raise
-    #except:
-    #    print("Error");
+    except:
+        print("Error");
 
     print(number);
 
