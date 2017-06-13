@@ -18,7 +18,7 @@ class DigitRecognition:
         height, width = img.shape[:2]
 
         # Alle Corners in Bild finden.
-        corners = cv2.goodFeaturesToTrack(img, 10000, 0.0001, 10) # faktor ist 10 / 570
+        corners = cv2.goodFeaturesToTrack(img, 10000, 0.00001, 10) # faktor ist 10 / 570
         draw_im = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
         arr_oben = []
         arr_unten = []
@@ -34,7 +34,7 @@ class DigitRecognition:
 
             # Nur Corners am oberen oder unteren Rand auswählen
             #5% ausrechnen
-            top10proz = height * 0.05
+            top10proz = height * 0.10
             if y < top10proz:
                 arr_oben.append([x, y])
                 arr_all.append([x, y])
@@ -78,5 +78,7 @@ class DigitRecognition:
         if len(arr_all) == 4:
             print(4)
             number = 1
+
+        cv2.imshow('resized2', draw_im)
 
         return number
