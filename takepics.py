@@ -32,14 +32,14 @@ while number > 0:
     cv2.imshow('asd', img)
     fn = 'imgs/' + repr(number) + '.jpg'
     print(fn)
-    cv2.imwrite('imgs/' + repr(number) + '.jpg', img)
+    cv2.imwrite('/tmp/imgs/' + repr(number) + '.jpg', img)
 
     number += 1
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-    time.sleep(.500)
+    time.sleep(.100)
 
 cap.release()
 cv2.destroyAllWindows()

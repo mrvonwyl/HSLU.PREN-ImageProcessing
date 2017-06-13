@@ -1,10 +1,12 @@
 import threading
 
 import multiprocessing
+import time
 
 from DisplayNumber import DisplayNumber
 from AmpelMain import MainAmpelerkennung
 from SerialRead import SerialRead
+from Serial import Serial
 
 class PinkPanzer:
     readyToStart = 0
@@ -38,6 +40,12 @@ class PinkPanzer:
         process2.start()
         process_readSerial.start()
 
+        time.sleep(15)
+        process.terminate()
+        dn.everythingOff()
+        dn.displayDigit(2)
+        ser = Serial()
+        ser.sendText('2')
         #t_blink = threading.Thread(target=dn.blink())
         #t_blink.start()
         #ampel = MainAmpelerkennung()

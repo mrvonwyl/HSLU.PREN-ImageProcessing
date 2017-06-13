@@ -22,3 +22,7 @@ class Serial:
         ser.write(text.encode('ascii'))
         time.sleep(1)
 
+    def readSerial(self):
+        while 1:
+            x=ser.readline()
+            print (x)

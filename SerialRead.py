@@ -17,7 +17,6 @@ class SerialRead:
     def __init__(self):
         global ser
 
-
     def readSerial(self):
         while 1:
             x=ser.readline()
