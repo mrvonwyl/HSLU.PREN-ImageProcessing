@@ -160,12 +160,6 @@ class DigitIsolation:
             roi[2] = br
             roi[3] = bl
 
-            tl, tr, br, bl = DigitIsolation.order_points(roi)
-            roi[0] = tl
-            roi[1] = tr
-            roi[2] = br
-            roi[3] = bl
-
             cv2.circle(black, (tl[0], tl[1]), 3, (0, 255, 255), 10) # yellow
             cv2.circle(black, (tr[0], tr[1]), 3, (255, 0, 0), 10) # blue
             cv2.circle(black, (br[0], br[1]), 3, (255, 0, 255), 10) # magenta
@@ -198,29 +192,28 @@ class DigitIsolation:
         black = cv2.morphologyEx(black, cv2.MORPH_CLOSE, kernel)
         black = cv2.morphologyEx(black, cv2.MORPH_OPEN, kernel)
 
-        im2, contours, hierarchy = cv2.findContours(black, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
+        _, contours, _ = cv2.findContours(black, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
 
-        offsetX = 0
+        _, iwidth = img.shape[:2]
         width = 0
-        offsetY = 0
         height = 0
-
         y = 0
-        x = 0
-        w = 0
         h = 0
 
-        for contour in contours:
-            [x, y, w, h] = cv2.boundingRect(contour)
+
+        for cnt in contours:
+            [x, y, w, h] = cv2.boundingRect(cnt)
             if w * h > width * height and w > 10 and h > 10:
                 width = w
                 height = h
-                offsetX = x
-                offsetY = y
 
         y = math.floor(y + (h * margin))
         h = math.floor(h * (1 - 2 * margin))
 
-        img = img[y:y+h, x:x+w]
+        # cv2.rectangle(img, (0, y), (x+iwidth, y+h), (255, 0, 0), 2)
+
+        cv2.imshow('asd', img)
+
+        img = img[y:y+h, 0:iwidth]
 
         return img

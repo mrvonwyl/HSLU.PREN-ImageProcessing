@@ -23,7 +23,7 @@ cap = cv2.VideoCapture(1)
 number = 0
 
 while number == 0:
-    img = cv2.imread('images/3.jpg')
+    img = cv2.imread('images/32.jpg')
 
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -34,13 +34,12 @@ while number == 0:
 
         resized = di.isolate_roman_digit(img)
         cv2.imshow('resized', resized)
-        height, width = resized.shape[:2]
 
         number = dr.recognize_digit(resized)
     except (KeyboardInterrupt, SystemExit):
         raise
     except:
-        print("Error");
+       print("Error");
 
     print(number);
 

@@ -12,6 +12,8 @@ class DigitRecognition:
     def recognize_digit(img):
         number = 0
 
+        img2 = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
         _, contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
         angles = []
 
@@ -21,8 +23,14 @@ class DigitRecognition:
 
             if epsilon >= 1:
                 _, _, angle = cv2.fitEllipse(cnt)
+                rect = cv2.minAreaRect(cnt)
+                box = cv2.boxPoints(rect)
+                box = np.int0(box)
+                cv2.drawContours(img2, [box], 0, (angle, 127, 0), 2)
+
                 angles.append(angle)
 
+        cv2.imshow('eli', img2)
         print('angles: ' + repr(angles))
 
         if len(angles) == 1:
