@@ -38,19 +38,22 @@ class DigitRecognition:
             cv2.imwrite(fn, orig)
             print("image save as: " + fn)
 
+        a1 = 12
+        a2 = 168
+
         if len(angles) == 1:
             number = 1
         elif len(angles) == 2:
-            angledif = abs(angles[0] - angles[1])
-            if angledif < 12:
+            angledif = abs(abs(angles[0] - angles[1]))
+            if angledif < a1 or angledif > a2:
                 number = 2
             else:
                 number = 5
         elif len(angles) == 3:
-            angledif1 = abs(angles[0] - angles[1])
-            angledif2 = abs(angles[0] - angles[2])
+            angledif1 = abs(abs(angles[0] - angles[1]))
+            angledif2 = abs(abs(angles[0] - angles[2]))
 
-            if angledif1 < 12 and angledif2 < 12:
+            if (angledif1 < a1 or angledif1 > a2) and (angledif2 < a1 or angledif2 > a2):
                 number = 3
             else:
                 number = 4
