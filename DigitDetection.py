@@ -29,7 +29,7 @@ class DigitDetection(Thread):
                 time2 = int(round(time.time() * 1000))
                 print('isolated: ' + repr(time2 - time1))
 
-                self.number = dr.recognize_digit(resized)
+                self.number = dr.recognize_digit(resized, img)
 
                 time3 = int(round(time.time() * 1000))
                 print('recognized: ' + repr(time3 - time2))
@@ -45,7 +45,6 @@ class DigitDetection(Thread):
                 break
 
             # time.sleep(.500)
-            number = 0
 
         # When everything done, release the capture
         print("final number: " + repr(number))

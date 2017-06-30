@@ -9,7 +9,7 @@ from DigitIsolation import DigitIsolation
 class DigitRecognition:
 
     @staticmethod
-    def recognize_digit(img):
+    def recognize_digit(img, orig):
         number = 0
 
         img2 = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
@@ -33,6 +33,11 @@ class DigitRecognition:
         cv2.imshow('eli', img2)
         print('angles: ' + repr(angles))
 
+        if number != 0:
+            fn = '/tmp/imgs/' + str(int(round(time.time() * 1000))) + '.jpg'
+            cv2.imwrite(fn, img)
+            print("image save as: " + fn)
+
         if len(angles) == 1:
             number = 1
         elif len(angles) == 2:
@@ -49,10 +54,5 @@ class DigitRecognition:
                 number = 3
             else:
                 number = 4
-
-        if number != 0:
-            fn = '/tmp/imgs/' + str(int(round(time.time() * 1000))) + '.jpg'
-            cv2.imwrite(fn, img2)
-            print("image save as: " + fn)
 
         return number
