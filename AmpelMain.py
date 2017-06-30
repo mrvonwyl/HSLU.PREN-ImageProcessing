@@ -37,7 +37,8 @@ class MainAmpelerkennung:
         if (camera.isOpened()):
             while (loop):
 
-                print (traffic_light)
+                #Auskommentiert durch Lukas 30.06.2017
+                #print (traffic_light)
 
                 # grab the current frame
                 _, frame = camera.read()
