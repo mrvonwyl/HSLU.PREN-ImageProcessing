@@ -30,9 +30,9 @@ while number > 0:
     img = frame
 
     cv2.imshow('asd', img)
-    fn = 'imgs/' + repr(number) + '.jpg'
+    fn = '/tmp/imgs/' + repr(number) + '.jpg'
     print(fn)
-    cv2.imwrite('/tmp/imgs/' + repr(number) + '.jpg', img)
+    cv2.imwrite(fn, img)
 
     number += 1
 
