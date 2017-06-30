@@ -184,7 +184,7 @@ class DigitIsolation:
 
         cv2.imshow('asd', img)
 
-        margin = 0.2
+        margin = 0.22
 
         black = copy.copy(img)
 

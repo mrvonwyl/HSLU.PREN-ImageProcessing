@@ -23,7 +23,7 @@ cap = cv2.VideoCapture(0)
 number = 0
 
 while number == 0:
-    img = cv2.imread('images/32.jpg')
+    img = cv2.imread('images/150.jpg')
 
     # Capture frame-by-frame
     ret, frame = cap.read()
