@@ -51,7 +51,7 @@ class PinkPanzer:
             if(number != 0):
                 numberFound=True
             time.sleep(0.1)
-
+        print("Nummer gefunden in Main: "+str(number))
         dd.cancel()
 
         dn.setNumber(number)

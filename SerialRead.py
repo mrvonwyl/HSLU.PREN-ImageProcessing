@@ -18,7 +18,9 @@ class SerialRead:
         global ser
 
     def readSerial(self):
+        print("Serial Read Init")
         while 1:
             x=ser.readline()
+            print(x.__len__())
             print (x)
 
