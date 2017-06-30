@@ -31,19 +31,23 @@ class PinkPanzer:
 
     def main():
         dn = DisplayNumber()
+
         ampel = MainAmpelerkennung()
         sRead = SerialRead()
-        process = multiprocessing.Process(target=dn.blink)
         process2 = multiprocessing.Process(target=ampel.detect_light)
         process_readSerial = multiprocessing.Process(target=sRead.readSerial)
-        process.start()
+
+        dn.start()
         process2.start()
         process_readSerial.start()
 
         time.sleep(15)
-        process.terminate()
+
+        dn.setNumber(2)
         dn.everythingOff()
-        dn.displayDigit(2)
+
+        #Bei Cancel wird letzte Blinken beendet und gegebene Zahl angezeigt
+        dn.cancel()
         ser = Serial()
         ser.sendText('2')
         #t_blink = threading.Thread(target=dn.blink())
