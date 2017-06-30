@@ -37,7 +37,6 @@ class PinkPanzer:
         finish = False
         while not finish:
             msg = sRead.getMsg()
-            print('msg main: ' + repr(msg))
             if msg == "finish":
                 finish = True
                 number = dd.getNumber()
