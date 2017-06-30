@@ -35,7 +35,7 @@ class DigitRecognition:
 
         if number != 0:
             fn = '/tmp/imgs/' + str(int(round(time.time() * 1000))) + '.jpg'
-            cv2.imwrite(fn, img)
+            cv2.imwrite(fn, orig)
             print("image save as: " + fn)
 
         if len(angles) == 1:
