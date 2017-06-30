@@ -32,7 +32,9 @@ class DigitDetection(Thread):
 
                 temp_number = dr.recognize_digit(resized, img)
 
-                self.number[temp_number] = self.number[temp_number] + 1
+                if temp_number >= 1 and temp_number <= 5:
+                    print(temp_number)
+                    self.number[temp_number - 1] = self.number[temp_number - 1] + 1
 
                 # time3 = int(round(time.time() * 1000))
                 # print('recognized: ' + repr(time3 - time2))
@@ -41,14 +43,14 @@ class DigitDetection(Thread):
             except:
                 i = 0
                 # time3 = int(round(time.time() * 1000))
-                # print('error: ' + repr(time3 - time1))
+                # print('error')
 
             print(self.number)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-            time.sleep(.1)
+            time.sleep(.5)
 
         # When everything done, release the capture
         print("final numbers: " + repr(self.number))
