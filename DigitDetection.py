@@ -1,5 +1,6 @@
 import time
 import cv2
+import numpy as np
 from threading import Thread
 
 from DigitIsolation import DigitIsolation as di
@@ -16,9 +17,9 @@ class DigitDetection(Thread):
             # Capture frame-by-frame
             ret, frame = cap.read()
 
-            time1 = int(round(time.time() * 1000))
+            # time1 = int(round(time.time() * 1000))
             try:
-                print('start: ' + repr(0))
+                # print('start: ' + repr(0))
 
                 img = frame
                 cv2.imshow("orig", img)
@@ -26,18 +27,21 @@ class DigitDetection(Thread):
                 resized = di.isolate_roman_digit(img)
                 cv2.imshow('resized', resized)
 
-                time2 = int(round(time.time() * 1000))
-                print('isolated: ' + repr(time2 - time1))
+                # time2 = int(round(time.time() * 1000))
+                # print('isolated: ' + repr(time2 - time1))
 
-                self.number = dr.recognize_digit(resized, img)
+                temp_number = dr.recognize_digit(resized, img)
 
-                time3 = int(round(time.time() * 1000))
-                print('recognized: ' + repr(time3 - time2))
+                self.number[temp_number] = self.number[temp_number] + 1
+
+                # time3 = int(round(time.time() * 1000))
+                # print('recognized: ' + repr(time3 - time2))
             except (KeyboardInterrupt, SystemExit):
                 raise
             except:
-                time3 = int(round(time.time() * 1000))
-                print('error: ' + repr(time3 - time1))
+                i = 0
+                # time3 = int(round(time.time() * 1000))
+                # print('error: ' + repr(time3 - time1))
 
             print(self.number)
 
@@ -47,13 +51,16 @@ class DigitDetection(Thread):
             # time.sleep(.500)
 
         # When everything done, release the capture
-        print("final number: " + repr(number))
+        print("final numbers: " + repr(self.number))
 
         cap.release()
         cv2.destroyAllWindows()
 
     def getNumber(self):
-        return self.number
+        if self.number.max() == 0:
+            return 0
+        else:
+            return self.number.argmax(axis=0) + 1
 
     def cancel(self):
         self.cancelled = True
@@ -61,4 +68,4 @@ class DigitDetection(Thread):
     def __init__(self):
         super(DigitDetection, self).__init__()
         self.cancelled = False
-        self.number = 0
+        self.number = np.array([0, 0, 0, 0, 0], np.uint8)

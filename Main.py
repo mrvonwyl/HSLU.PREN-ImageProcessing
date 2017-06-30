@@ -8,6 +8,7 @@ from AmpelMain import MainAmpelerkennung
 from DigitDetection import DigitDetection
 from SerialRead import SerialRead
 from Serial import Serial
+from random import randint
 
 
 class PinkPanzer:
@@ -16,51 +17,50 @@ class PinkPanzer:
 
     def __init__(self):
         print("init pinkpanzer")
-        # init kamera A
-        # init ampelerkennung
-        # init kamera Z
-        # init ziffererkennung
-
-        # Thread starten, welcher die Ziefferanzeige blinken lässt
-
-        #mit t_blink.join() kann thread beendet werden
-
-        # run ampelerkennung -> set readyToStart
-        # send info to FMBD
-        # run ziffererkennung -> set recognizedNumber
-        # display number
-        # send recognized number to FMBD
 
     def main():
         dn = DisplayNumber()
         dd = DigitDetection()
         ampel = MainAmpelerkennung()
         sRead = SerialRead()
+        ser = Serial()
         process2 = multiprocessing.Process(target=ampel.detect_light)
-        process_readSerial = multiprocessing.Process(target=sRead.readSerial)
 
         dn.start()
         dd.start()
+        sRead.start()
 
         process2.start()
-        process_readSerial.start()
 
-        numberFound= False
-        while not numberFound:
-            number = dd.getNumber()
-            if(number != 0):
-                numberFound=True
-            time.sleep(0.1)
-        print("Nummer gefunden in Main: "+str(number))
-        dd.cancel()
 
-        dn.setNumber(number)
+
+        finish = False
+        while not finish:
+            msg = sRead.getMsg()
+            print('msg main: ' + repr(msg))
+            if msg == "finish":
+                finish = True
+                number = dd.getNumber()
+
+                print("number main: " + number)
+
+                if number == 0:
+                    number = randint(1, 5)
+
+                print("number main definitive: " + number)
+
+                dd.cancel()
+                dn.setNumber(number)
+                dn.cancel()
+                ser.sendText(str(number))
+
+        print("pink panzer finish")
+
         #dn.everythingOff()
 
         #Bei Cancel wird letzte Blinken beendet und gegebene Zahl angezeigt
-        dn.cancel()
-        ser = Serial()
-        ser.sendText(str(number))
+
+
 
         #t_blink = threading.Thread(target=dn.blink())
         #t_blink.start()

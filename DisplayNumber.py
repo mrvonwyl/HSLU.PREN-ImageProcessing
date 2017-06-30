@@ -54,8 +54,8 @@ class DisplayNumber(Thread):
 
     def displayDigit(self, number):
         #Sicherheit, falls irgend ein Wert > 5 gemeldet wird.
-        if number>5:
-            number=randint(0,5)
+        if number > 5:
+            number = randint(1, 5)
         #print "Folgende Nummer wird angezeigt" + str(number)
         for loop in range(0, 7):
             GPIO.output(segments[loop], num[str(number)][loop])
