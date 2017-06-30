@@ -5,8 +5,10 @@ import time
 
 from DisplayNumber import DisplayNumber
 from AmpelMain import MainAmpelerkennung
+from DigitDetection import DigitDetection
 from SerialRead import SerialRead
 from Serial import Serial
+
 
 class PinkPanzer:
     readyToStart = 0
@@ -31,25 +33,35 @@ class PinkPanzer:
 
     def main():
         dn = DisplayNumber()
-
+        dd = DigitDetection()
         ampel = MainAmpelerkennung()
         sRead = SerialRead()
         process2 = multiprocessing.Process(target=ampel.detect_light)
         process_readSerial = multiprocessing.Process(target=sRead.readSerial)
 
         dn.start()
+        dd.start()
+
         process2.start()
         process_readSerial.start()
 
-        time.sleep(15)
+        numberFound= False
+        while not numberFound:
+            number = dd.getNumber()
+            if(number != 0):
+                numberFound=True
+            time.sleep(0.1)
 
-        dn.setNumber(2)
-        dn.everythingOff()
+        dd.cancel()
+
+        dn.setNumber(number)
+        #dn.everythingOff()
 
         #Bei Cancel wird letzte Blinken beendet und gegebene Zahl angezeigt
         dn.cancel()
         ser = Serial()
-        ser.sendText('2')
+        ser.sendText(str(number))
+
         #t_blink = threading.Thread(target=dn.blink())
         #t_blink.start()
         #ampel = MainAmpelerkennung()
