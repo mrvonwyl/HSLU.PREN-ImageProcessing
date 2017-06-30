@@ -5,7 +5,7 @@ import cv2
 from DigitIsolation import DigitIsolation as di
 from DigitRecognition import DigitRecognition as dr
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 # cap.set(3, 1280)
 # cap.set(4, 720)
@@ -29,7 +29,7 @@ while number == 0:
     ret, frame = cap.read()
 
     try:
-        # img = frame
+        img = frame
         cv2.imshow("orig", img)
 
         resized = di.isolate_roman_digit(img)
