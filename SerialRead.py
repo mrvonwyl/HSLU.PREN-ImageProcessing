@@ -21,6 +21,6 @@ class SerialRead:
         print("Serial Read Init")
         while 1:
             x=ser.readline()
-            print(x.__len__())
-            print (x)
+            if(x.__len__() != 0):
+                print (x)
 
