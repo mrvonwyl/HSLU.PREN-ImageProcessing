@@ -48,7 +48,7 @@ class DigitDetection(Thread):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-            # time.sleep(.500)
+            time.sleep(.1)
 
         # When everything done, release the capture
         print("final numbers: " + repr(self.number))
