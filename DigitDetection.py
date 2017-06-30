@@ -20,7 +20,7 @@ class DigitDetection(Thread):
             try:
                 print('start: ' + repr(0))
 
-                # img = frame
+                img = frame
                 cv2.imshow("orig", img)
 
                 resized = di.isolate_roman_digit(img)
