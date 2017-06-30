@@ -45,6 +45,7 @@ class DigitRecognition:
             number = 1
         elif len(angles) == 2:
             angledif = abs(abs(angles[0] - angles[1]))
+            print(angledif)
             if angledif < a1 or angledif > a2:
                 number = 2
             else:
