@@ -50,4 +50,9 @@ class DigitRecognition:
             else:
                 number = 4
 
+        if number != 0:
+            fn = "/tmp/imgs/" + str(int(round(time.time() * 1000))) + ".jpg"
+            print("image save as: " + fn)
+            cv2.imwrite(fn, img)
+
         return number
