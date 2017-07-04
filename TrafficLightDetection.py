@@ -7,7 +7,7 @@ import cv2
 def frame_prep(frame):
         frame = imutils.resize(frame, width = 600)
         frame = frame[175:365, 475:515]
-        resized_frame = frame[175:365, 475:515]
+        resized_frame = frame
         frame = cv2.GaussianBlur(frame, (11, 11), 0)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         return (frame, resized_frame)
