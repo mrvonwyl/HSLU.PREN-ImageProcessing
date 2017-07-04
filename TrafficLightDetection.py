@@ -39,7 +39,7 @@ def color_detection(frame, color):
                 mask = cv2.add(mask_top, mask_bottom)
 
         elif (color == 'green'):
-                bottom = np.array([ 30, 60, 60])
+                bottom = np.array([ 30, 50, 50])
                 top = np.array([ 90, 255, 255])
 
                 # construct a mask for the upper bound of the color "green",
