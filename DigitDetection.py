@@ -12,7 +12,7 @@ class DigitDetection(Thread):
         cap = cv2.VideoCapture(0)
 
         while not self.cancelled:
-            img = cv2.imread('images/150.jpg')
+            img = cv2.imread('images/a2.png')
 
             # Capture frame-by-frame
             ret, frame = cap.read()
@@ -22,7 +22,7 @@ class DigitDetection(Thread):
             try:
                 # print('start: ' + repr(0))
 
-                img = frame
+                # img = frame
                 if self.debug:
                     cv2.imshow("orig", img)
 
