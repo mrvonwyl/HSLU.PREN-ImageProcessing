@@ -82,7 +82,7 @@ class DigitIsolation:
     @staticmethod
     def isolate_roman_digit(img, debug):
         black_min = np.array([0, 0, 0], np.uint8)
-        black_max = np.array([50, 50, 50], np.uint8)
+        black_max = np.array([40, 40, 40], np.uint8)
 
         # blackBoundaries = [([0, 0, 0], [50, 50, 50])]
 
