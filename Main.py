@@ -37,22 +37,23 @@ class PinkPanzer:
         finish = False
         while not finish:
             msg = sRead.getMsg()
-            if msg == "finish":
+            if "F" in str(msg):
+                #if msg == "b'Finish'":
                 finish = True
                 number = dd.getNumber()
 
-                print("number main: " + number)
+                print("number main: " + str(number))
 
                 if number == 0:
                     number = randint(1, 5)
 
-                print("number main definitive: " + number)
+                print("number main definitive: " + str(number))
 
                 dd.cancel()
                 dn.setNumber(number)
                 dn.cancel()
                 ser.sendText(str(number))
-
+            time.sleep(0.5)
         print("pink panzer finish")
 
         #dn.everythingOff()

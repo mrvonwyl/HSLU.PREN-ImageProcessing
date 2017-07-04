@@ -10,7 +10,7 @@ class SerialRead(Thread):
             x = self.ser.readline()
             if x.__len__() != 0:
                 self.msg = x
-                print('serial: ' + repr(x))
+                print('serial: ' + repr(self.msg))
 
     def __init__(self):
         super(SerialRead, self).__init__()
@@ -26,7 +26,7 @@ class SerialRead(Thread):
         )
 
     def getMsg(self):
-        return
+        return self.msg
 
     def cancel(self):
         print("canceled")
