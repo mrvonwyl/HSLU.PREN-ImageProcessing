@@ -75,6 +75,6 @@ class DigitDetection(Thread):
     def __init__(self):
         super(DigitDetection, self).__init__()
         self.cancelled = False
-        self.debug = True
+        self.debug = False
         self.timedebug = False
         self.number = np.array([0, 0, 0, 0, 0], np.uint16)
