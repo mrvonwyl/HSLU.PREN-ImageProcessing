@@ -31,7 +31,7 @@ class MainAmpelerkennung:
         # even if no signal from the traffic light can be detected
         loop = True
         traffic_light = 's'
-        emergency_counter = 0
+        debug_mode = False
 
         # looping while video capture is active
         if (camera.isOpened()):
@@ -44,7 +44,7 @@ class MainAmpelerkennung:
                 _, frame = camera.read()
 
                 # prepare the frame for color detection
-                prepped_frame = frame_prep(frame)
+                prepped_frame, resized_frame = frame_prep(frame)
 
                 # set the color for color detection and create
                 # a mask by checking for red and green traffic lights
@@ -62,10 +62,13 @@ class MainAmpelerkennung:
                     print (traffic_light)
                     print ('Green Light detected')
                     loop = False
-
-                cv2.imshow('frame', frame)
-                cv2.imshow('prepped_frame', prepped_frame)
-                cv2.imshow('mask', mask)
+                    
+                if (debug_mode):
+                    cv2.imshow('frame', frame)
+                    cv2.imshow('resized_frame', resized_frame)
+                    cv2.imshow('prepped_frame', prepped_frame)
+                    cv2.imshow('mask', mask)
+                    
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 

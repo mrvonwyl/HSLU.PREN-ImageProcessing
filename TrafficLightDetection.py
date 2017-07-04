@@ -7,9 +7,10 @@ import cv2
 def frame_prep(frame):
         frame = imutils.resize(frame, width = 600)
         frame = frame[175:365, 475:515]
+        resized_frame = frame[175:365, 475:515]
         frame = cv2.GaussianBlur(frame, (11, 11), 0)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        return frame
+        return (frame, resized_frame)
 
 # detects the given color and creates a bit mask for said color
 def color_detection(frame, color):
@@ -38,7 +39,7 @@ def color_detection(frame, color):
                 mask = cv2.add(mask_top, mask_bottom)
 
         elif (color == 'green'):
-                bottom = np.array([ 30, 100, 100])
+                bottom = np.array([ 30, 60, 60])
                 top = np.array([ 90, 255, 255])
 
                 # construct a mask for the upper bound of the color "green",
