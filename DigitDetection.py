@@ -22,7 +22,7 @@ class DigitDetection(Thread):
             try:
                 # print('start: ' + repr(0))
 
-                # img = frame
+                img = frame
                 if self.debug:
                     cv2.imshow("orig", img)
 
