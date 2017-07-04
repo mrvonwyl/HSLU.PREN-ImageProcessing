@@ -17,33 +17,38 @@ class DigitDetection(Thread):
             # Capture frame-by-frame
             ret, frame = cap.read()
 
-            # time1 = int(round(time.time() * 1000))
+            if self.timedebug:
+                time1 = int(round(time.time() * 1000))
             try:
                 # print('start: ' + repr(0))
 
                 img = frame
-                cv2.imshow("orig", img)
+                if self.debug:
+                    cv2.imshow("orig", img)
 
-                resized = di.isolate_roman_digit(img)
-                cv2.imshow('resized', resized)
+                resized = di.isolate_roman_digit(img, self.debug)
+                if self.debug:
+                    cv2.imshow('resized', resized)
 
-                # time2 = int(round(time.time() * 1000))
-                # print('isolated: ' + repr(time2 - time1))
+                if self.timedebug:
+                    time2 = int(round(time.time() * 1000))
+                    print('isolated: ' + repr(time2 - time1))
 
-                temp_number = dr.recognize_digit(resized, img)
+                temp_number = dr.recognize_digit(resized, img, self.debug)
 
                 if temp_number >= 1 and temp_number <= 5:
                     print(temp_number)
                     self.number[temp_number - 1] = self.number[temp_number - 1] + 1
 
-                # time3 = int(round(time.time() * 1000))
-                # print('recognized: ' + repr(time3 - time2))
+                if self.timedebug:
+                    time3 = int(round(time.time() * 1000))
+                    print('recognized: ' + repr(time3 - time2))
             except (KeyboardInterrupt, SystemExit):
                 raise
             except:
                 i = 0
-                # time3 = int(round(time.time() * 1000))
-                # print('error')
+                # if self.timedebug:
+                    # time3 = int(round(time.time() * 1000))
 
             print(self.number)
 
@@ -70,4 +75,6 @@ class DigitDetection(Thread):
     def __init__(self):
         super(DigitDetection, self).__init__()
         self.cancelled = False
+        self.debug = False
+        self.timedebug = True
         self.number = np.array([0, 0, 0, 0, 0], np.uint16)

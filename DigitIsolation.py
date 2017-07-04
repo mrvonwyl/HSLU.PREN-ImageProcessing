@@ -11,11 +11,6 @@ class DigitIsolation:
         upper = np.array(boundaries[0][1], dtype="uint8")
         return cv2.inRange(image, lower, upper)
 
-    #@staticmethod
-    #def order_points_roi(pts):
-
-
-
     @staticmethod
     def order_points(pts):
         # initialzie a list of coordinates that will be ordered
@@ -85,7 +80,7 @@ class DigitIsolation:
         return warped
 
     @staticmethod
-    def isolate_roman_digit(img):
+    def isolate_roman_digit(img, debug):
         black_min = np.array([0, 0, 0], np.uint8)
         black_max = np.array([50, 50, 50], np.uint8)
 
@@ -107,9 +102,9 @@ class DigitIsolation:
         redmask = cv2.morphologyEx(redmask, cv2.MORPH_CLOSE, kernel)
         redmask = cv2.morphologyEx(redmask, cv2.MORPH_OPEN, kernel)
 
-        imgred = cv2.bitwise_and(bgrimg, bgrimg, mask=redmask)
-
-        cv2.imshow('imgred', imgred)
+        if debug:
+            imgred = cv2.bitwise_and(bgrimg, bgrimg, mask=redmask)
+            cv2.imshow('imgred', imgred)
 
         # Create a blank 300x300 black image
         height, width = img.shape[:2]
@@ -161,29 +156,32 @@ class DigitIsolation:
             roi[2] = br
             roi[3] = bl
 
-            cv2.circle(black, (tl[0], tl[1]), 3, (0, 255, 255), 10) # yellow
-            cv2.circle(black, (tr[0], tr[1]), 3, (255, 0, 0), 10) # blue
-            cv2.circle(black, (br[0], br[1]), 3, (255, 0, 255), 10) # magenta
-            cv2.circle(black, (bl[0], bl[1]), 3, (255, 255, 0), 10) # cyan
+            if debug:
+                cv2.circle(black, (tl[0], tl[1]), 3, (0, 255, 255), 10) # yellow
+                cv2.circle(black, (tr[0], tr[1]), 3, (255, 0, 0), 10) # blue
+                cv2.circle(black, (br[0], br[1]), 3, (255, 0, 255), 10) # magenta
+                cv2.circle(black, (bl[0], bl[1]), 3, (255, 255, 0), 10) # cyan
 
-            cv2.drawContours(black, [box1], 0, (0, 255, 0), 2)
-            cv2.drawContours(black, [box2], 0, (0, 255, 0), 2)
+                cv2.drawContours(black, [box1], 0, (0, 255, 0), 2)
+                cv2.drawContours(black, [box2], 0, (0, 255, 0), 2)
 
-        cv2.imshow('roi', black)
+        if debug:
+            cv2.imshow('roi', black)
 
         warped = DigitIsolation.four_point_transform(bgrimg, roi)
         blackmask = cv2.inRange(warped, black_min, black_max)
         resized = cv2.resize(blackmask, (800, 450), interpolation=cv2.INTER_CUBIC)
 
-        resized = DigitIsolation.digit_bounding_box(resized)
+        resized = DigitIsolation.digit_bounding_box(resized, debug)
 
         return resized
 
 
     @staticmethod
-    def digit_bounding_box(img):
+    def digit_bounding_box(img, debug):
 
-        cv2.imshow('asd', img)
+        if debug:
+            cv2.imshow('asd', img)
 
         margin = 0.25
 
@@ -201,7 +199,6 @@ class DigitIsolation:
         y = 0
         h = 0
 
-
         for cnt in contours:
             [x, y, w, h] = cv2.boundingRect(cnt)
             if w * h > width * height and w > 10 and h > 10:
@@ -213,7 +210,8 @@ class DigitIsolation:
 
         # cv2.rectangle(img, (0, y), (x+iwidth, y+h), (255, 0, 0), 2)
 
-        cv2.imshow('asd', img)
+        if debug:
+            cv2.imshow('asd', img)
 
         img = img[y:y+h, 0:iwidth]
 
