@@ -86,9 +86,9 @@ class DigitIsolation:
 
         # blackBoundaries = [([0, 0, 0], [50, 50, 50])]
 
-        red1_min = np.array([0, 70, 50], np.uint8)
+        red1_min = np.array([0, 128, 128], np.uint8)
         red1_max = np.array([10, 255, 255], np.uint8)
-        red2_min = np.array([170, 70, 50], np.uint8)
+        red2_min = np.array([170, 128, 128], np.uint8)
         red2_max = np.array([180, 255, 255], np.uint8)
 
         bgrimg = img
