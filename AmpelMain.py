@@ -44,7 +44,7 @@ class MainAmpelerkennung:
                 _, frame = camera.read()
 
                 # prepare the frame for color detection
-                prepped_frame, resized_frame = frame_prep(frame)
+                prepped_frame = frame_prep(frame)
 
                 # set the color for color detection and create
                 # a mask by checking for red and green traffic lights
@@ -65,7 +65,6 @@ class MainAmpelerkennung:
                     
                 if (debug_mode):
                     cv2.imshow('frame', frame)
-                    cv2.imshow('resized_frame', resized_frame)
                     cv2.imshow('prepped_frame', prepped_frame)
                     cv2.imshow('mask', mask)
                     
