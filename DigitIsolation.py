@@ -86,10 +86,11 @@ class DigitIsolation:
 
         # blackBoundaries = [([0, 0, 0], [50, 50, 50])]
 
-        red1_min = np.array([0, 90, 80], np.uint8)
+        # 0, 70, 50
+        red1_min = np.array([0, 70, 50], np.uint8)
         red1_max = np.array([10, 255, 255], np.uint8)
-        red2_min = np.array([170, 90, 80], np.uint8)
-        red2_max = np.array([180, 160, 160], np.uint8)
+        red2_min = np.array([170, 70, 50], np.uint8)
+        red2_max = np.array([180, 255, 255], np.uint8)
 
         bgrimg = img
         hsvimg = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
