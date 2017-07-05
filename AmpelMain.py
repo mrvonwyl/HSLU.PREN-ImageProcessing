@@ -1,5 +1,8 @@
 import cv2
 import time
+
+import datetime
+
 from TrafficLightDetection import *
 from Serial import Serial
 
@@ -32,11 +35,11 @@ class MainAmpelerkennung:
         loop = True
         traffic_light = 's'
         debug_mode = False
-
+        begin = datetime.datetime.now()
+        begin = begin+30
         # looping while video capture is active
         if (camera.isOpened()):
             while (loop):
-
                 #Auskommentiert durch Lukas 30.06.2017
                 #print (traffic_light)
 
@@ -70,6 +73,10 @@ class MainAmpelerkennung:
                     
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
+                now = datetime.datetime.now()
+                if now > begin:
+                    loop = False
+
 
         else:
             print('No Video Capture detected')
